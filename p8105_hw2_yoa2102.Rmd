@@ -68,7 +68,18 @@ precip_2017 =
 
 #### Combining annual precipitation
 ```{r}
+month_df = 
+  tibble(
+    month = 1:12,
+    month_name = month.name
+  )
+
 precip_df = 
   bind_rows(precip_2018, precip_2017)
+
+precip_month_name_df = 
+left_join(precip_df, month_df, by = "month")
 ```
 
+
+#### Describing the precipitation data
