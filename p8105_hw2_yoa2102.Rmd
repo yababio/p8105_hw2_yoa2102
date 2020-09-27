@@ -2,7 +2,7 @@
 title: "Homework 2"
 output: github_document
 ---
-```{r}
+```{r setup}
 library(tidyverse)
 library(readxl)
 ```
