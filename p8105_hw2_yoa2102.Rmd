@@ -96,12 +96,16 @@ transit_df =
      "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv") %>%
   janitor::clean_names() %>%
   select(line:entry, vending, ada) %>%
-  mutate(entry = case_when(entry == "YES" ~ "TRUE",
-                           entry == "NO" ~ "FALSE")) %>%
-  mutate(entry = as.logical(entry))
+  mutate(entry = recode(entry, YES = TRUE, NO = FALSE))
+ 
 
   
 sapply(transit_df, class)
 ```
 
-#### Determining number of distint stations
+#### Determining number of distinct stations
+```{r distinct_stations}
+
+
+```
+
