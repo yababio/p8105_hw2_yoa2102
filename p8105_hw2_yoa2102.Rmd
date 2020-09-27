@@ -83,3 +83,25 @@ left_join(precip_df, month_df, by = "month")
 
 
 #### Describing the precipitation data
+
+
+
+## Problem 2
+
+#### Reading and cleaning transit data
+
+```{r read_transit}
+transit_df =
+   read_csv(
+     "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv") %>%
+  janitor::clean_names() %>%
+  select(line:entry, vending, ada) %>%
+  mutate(entry = case_when(entry == "YES" ~ "TRUE",
+                           entry == "NO" ~ "FALSE")) %>%
+  mutate(entry = as.logical(entry))
+
+  
+sapply(transit_df, class)
+```
+
+#### Determining number of distint stations
