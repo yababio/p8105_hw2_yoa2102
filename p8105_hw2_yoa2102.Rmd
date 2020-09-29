@@ -173,6 +173,19 @@ pols_mutate_president =
   select(-prez_dem, -prez_gop, -day)
 ```
 
-sapply(month_df, class)
-?case_when
 
+```{r load_clean_snp}
+snp_df =
+   read_csv(
+     "./data/fivethirtyeight_datasets/snp.csv") %>%
+  janitor::clean_names() %>%
+  separate(date, into = c("month", "day", "year")) %>%
+  mutate(month = as.integer(month))
+
+snp_df_month = 
+  left_join(snp_df, month_df, by = "month") %>%
+  relocate(year, month) # %>%
+ #select(-day)
+```
+
+sapply(snp_df, class)
