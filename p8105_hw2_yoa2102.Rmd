@@ -171,6 +171,7 @@ pols_mutate_president =
     prez_gop == 2 ~ "gop"
   )) %>%
   select(-prez_dem, -prez_gop, -day)
+
 ```
 
 
@@ -184,8 +185,36 @@ snp_df =
 
 snp_df_month = 
   left_join(snp_df, month_df, by = "month") %>%
-  relocate(year, month) # %>%
- #select(-day)
+  relocate(year, month) %>%
+  select(-day)
 ```
 
-sapply(snp_df, class)
+
+```{r load_clean_unemployment}
+unemployment_df =
+   read_csv(
+     "./data/fivethirtyeight_datasets/unemployment.csv") %>%
+  janitor::clean_names() %>%
+  pivot_longer(
+    jan:dec,
+    names_to = "month_name",
+    values_to = "unemployment_rate"
+  ) 
+
+
+
+ 
+```
+
+
+```{r merge_data}
+first_merge = 
+left_join(pols_mutate_president, snp_df_month, by = c("year", "month", "month_name")) %>%
+  mutate( year = as.double(year))
+
+final_merge = 
+  left_join(first_merge, unemployment_df, by = c("year", "month_name")) %>%
+  relocate(year, month, month_name)
+```
+
+sapply(unemployment_df, class)
