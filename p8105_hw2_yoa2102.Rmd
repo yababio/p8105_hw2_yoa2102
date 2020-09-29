@@ -133,8 +133,12 @@ transit_df_tidy =
     route1:route11,
     names_to = "route_number",
     values_to = "route_name")
-  
-    
+
+print(transit_df_tidy)
   
 ```
+
+
+## Problem 3
+
 
