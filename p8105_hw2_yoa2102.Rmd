@@ -13,14 +13,6 @@ library(readxl)
 
 Read the Mr. Trash Wheel data set into R.
 
-- Specify the sheet in the Excel file and to omit non-data entries (rows with notes / figures; columns containing notes) using arguments in read_excel
-
-- Use reasonable variable names
-
-- Omit rows that do not include dumpster-specific data
-
-- Round the number of sports balls to the nearest integer and converts the result to an integer variable 
-
 ```{r read_trashwheel}
 trashwheel_df =
   read_xlsx("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
@@ -103,9 +95,27 @@ transit_df =
 sapply(transit_df, class)
 ```
 
-#### Determining number of distinct stations
+#### Describing NYC Transit Data
+
+
+
+#### How many distinct stations are there?
 ```{r distinct_stations}
-
-
+distinct_stations = distinct(transit_df, station_name, line)
 ```
+There are `r nrow(distinct_stations)` distinct stations in NYC.
 
+#### How many stations are ADA compliant?
+```{r ada_compliant}
+ada_compliant = distinct(transit_df, station_name, line, ada) %>%
+  filter(ada == TRUE)
+```
+There are `r nrow(ada_compliant)` ADA compliant stations in NYC.
+
+#### What proportions of station entrances/exits without vending allow entrance?
+```{r vending_entrance}
+without_vending = filter(transit_df, vending == "NO")
+
+allow_entrance = filter(without_vending, entry == TRUE)
+```
+The proportion of station entrances/exits without vending that allow entrance is `r round(nrow(allow_entrance)/nrow(without_vending), 3)`.
