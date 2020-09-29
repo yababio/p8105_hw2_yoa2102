@@ -198,12 +198,9 @@ unemployment_df =
   pivot_longer(
     jan:dec,
     names_to = "month_name",
-    values_to = "unemployment_rate"
-  ) 
-
-
-
- 
+    values_to = "unemployment_rate")  %>%
+  mutate(month_name = month.name[as.factor(month_name)])
+  
 ```
 
 
