@@ -131,16 +131,26 @@ transit_df_tidy =
     route11 = as.character(route11)) %>%
   pivot_longer(
     route1:route11,
-    names_to = "route_number",
-    values_to = "route_name")
+    names_to = "route_name",
+    values_to = "route_number")
 
 print(transit_df_tidy)
   
 ```
 
 #### How many distinct stations serve the A train?
+```{r distinct_a}
+distinct_a = distinct(transit_df_tidy, line, station_name, route_name, .keep_all = TRUE) %>%
+  filter(route_name == "A")
+```
+There are `r nrow(distinct_a)` distinct stations that serve the A train in NYC.
+
 
 #### Of the stations that serve the A train, how many are ADA compliant?
+```{r}
+ada_compliant_a = filter(distinct_a, ada == TRUE)
+```
+Of the stations that serve the A train, there are `r nrow(ada_compliant_a)` stations that are ADA compliant.
 
 ## Problem 3
 ```{r load_clean_pols}
@@ -151,10 +161,18 @@ pols_df =
   separate(mon, into = c("year", "month", "day")) %>%
   mutate(month = as.integer(month))
 
-pols_df_tidy = 
-  left_join(pols_month, month_df, by = "month")
+pols_df_month = 
+  left_join(pols_df, month_df, by = "month")
   
- 
+pols_mutate_president =
+  mutate(pols_df_month, president = case_when(
+    prez_gop == 0 ~ "dem",
+    prez_gop == 1 ~ "gop",
+    prez_gop == 2 ~ "gop"
+  )) %>%
+  select(-prez_dem, -prez_gop, -day)
 ```
 
 sapply(month_df, class)
+?case_when
+
