@@ -90,9 +90,6 @@ transit_df =
   select(line:entry, vending, ada) %>%
   mutate(entry = recode(entry, YES = TRUE, NO = FALSE))
  
-
-  
-sapply(transit_df, class)
 ```
 
 #### Describing NYC Transit Data
@@ -119,3 +116,25 @@ without_vending = filter(transit_df, vending == "NO")
 allow_entrance = filter(without_vending, entry == TRUE)
 ```
 The proportion of station entrances/exits without vending that allow entrance is `r round(nrow(allow_entrance)/nrow(without_vending), 3)`.
+
+
+
+#### Reformatting the route and route name variables
+Next, reformat the data so that route number and route name are distinct variables.
+```{r reformat_route}
+transit_df_tidy =
+  transit_df %>%
+  mutate(
+    route8 = as.character(route8),
+    route9 = as.character(route9),
+    route10 = as.character(route10),
+    route11 = as.character(route11)) %>%
+  pivot_longer(
+    route1:route11,
+    names_to = "route_number",
+    values_to = "route_name")
+  
+    
+  
+```
+
