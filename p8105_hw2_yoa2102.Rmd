@@ -194,16 +194,12 @@ snp_df =
 unemployment_df =
    read_csv(
      "./data/fivethirtyeight_datasets/unemployment.csv") %>%
-  #janitor::clean_names() %>%
   pivot_longer(
     Jan:Dec,
-    #names_to = "month_name",
     names_to = "month",
-    values_to = "unemployment_rate")  %>%
-  relocate(Year, month) %>%
+    values_to = "unemployment_rate") %>%
   rename(year = Year)
-    #mutate(month = month.abb[as.factor(month)])
-  #mutate(month_name = month.name[month_name])
+  
   
 ```
 
@@ -211,11 +207,12 @@ unemployment_df =
 
 
 ```{r merge_data}
-first_merge = 
+first_join = 
 left_join(pols_df, snp_df, by = c("year", "month")) 
 
-final_merge = 
+final_df = 
   left_join(first_merge, unemployment_df, by = c("year", "month")) 
   
 ```
 
+sapply(pols_df, class)
