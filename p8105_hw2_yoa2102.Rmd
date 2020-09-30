@@ -70,7 +70,7 @@ precip_df =
   bind_rows(precip_2018, precip_2017)
 
 precip_month_name_df = 
-left_join(precip_df, month_df, by = "month") %>%
+  left_join(precip_df, month_df, by = "month") %>%
   relocate(year, month, month_name)
 ```
 
@@ -94,7 +94,7 @@ The 2017 and 2018 Precipitation datasets each have `r ncol(precip_2018)` columns
 
 ```{r read_transit}
 transit_df =
-   read_csv(
+  read_csv(
      "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv") %>%
   janitor::clean_names() %>%
   select(line:entry, vending, ada) %>%
@@ -108,7 +108,7 @@ This dataset consists of `r ncol(transit_df)` columns and `r nrow(transit_df)` r
 
 In order to clean the dataset thus far, variable names were standardized using `janitor::clean_names()`. Using `select`, the following relevant variables were kept from the original dataset: `r colnames(transit_df)`. Lastly, the `entry` variable was converted from a character to a logical variable using the functions `mutate` and `recode`.
 
-However, it is important to note that these data are NOT tidy. The route1:route11 variables make the dataset uneccessarily wide, and generate a large number of NAs. In order to optimize the dataset, it would be best to reformat these variables and their contents as observations within new variables (route name and route number).  
+However, it is important to note that these data are NOT tidy. The route1:route11 variables make the dataset uneccessarily wide, and generate a large number of NAs. In order to optimize the dataset, it would be best to reformat these variables and their contents as observations within new variables (route_name and route_number).  
 
 
 ##### How many distinct stations are there?
@@ -149,7 +149,7 @@ transit_df_tidy =
     names_to = "route_name",
     values_to = "route_number")
 
-print(transit_df_tidy)
+head(transit_df_tidy)
   
 ```
 
