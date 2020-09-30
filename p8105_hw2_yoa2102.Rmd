@@ -9,9 +9,9 @@ library(readxl)
 
 ## Problem 1
 
-#### Reading and cleaning the data set
 
-Read the Mr. Trash Wheel data set into R.
+
+##### Read the Mr. Trash Wheel dataset into R.
 
 ```{r read_trashwheel}
 trashwheel_df =
@@ -27,7 +27,8 @@ trashwheel_df =
 ```
 
 
-#### Reading and cleaning precipitation data for 2018
+
+##### Read and clean the precipitation data for 2018.
 
 ```{r read_precip_2018}
 precip_2018 = 
@@ -42,8 +43,7 @@ precip_2018 =
   relocate(year)
 ```
 
-
-#### Reading and cleaning precipitation data for 2017
+##### Read and clean the precipitation data for 2017.
 ```{r read_precip_2017}
 precip_2017 = 
   read_excel(
@@ -58,7 +58,7 @@ precip_2017 =
 ```
 
 
-#### Combining annual precipitation
+##### Now combine the annual precipitation data frames (2017 and 2018). 
 ```{r}
 month_df = 
   tibble(
@@ -75,13 +75,17 @@ left_join(precip_df, month_df, by = "month") %>%
 ```
 
 
-#### Describing the precipitation data
+##### Describe the Mr. Trash Wheel and precipitation datasets.
+This data set contains information from the Mr. Trashwheel trash collector in Baltimore, Maryland. As trash enters the harbor, it is collected by the trashwheel and stored in a dumpster. The dataset contains information about the month, year, day, and type of trash collected. The dataset consists of `r nrow(trashwheel_df)` rows and `r ncol(trashwheel_df)` columns. Additional data sheets include month precipitation data. In this dataset:
 
+* The median number of sports balls found in a dumpster in 2019 was `r trashwheel_df %>% filter(year == 2019) %>% pull(sports_balls) %>% median()`.
+
+* The average weight of the trash collected by the trashwheel in 2019 was `r trashwheel_df %>% filter(year == 2019) %>% pull(weight_tons) %>% mean()` tons. 
 
 
 ## Problem 2
 
-#### Reading and cleaning transit data
+##### Read and clean the NYC transit data.
 
 ```{r read_transit}
 transit_df =
@@ -93,24 +97,24 @@ transit_df =
  
 ```
 
-#### Describing NYC Transit Data
+##### Describe the NYC transit data.
 
 
 
-#### How many distinct stations are there?
+##### How many distinct stations are there?
 ```{r distinct_stations}
 distinct_stations = distinct(transit_df, station_name, line)
 ```
 There are `r nrow(distinct_stations)` distinct stations in NYC.
 
-#### How many stations are ADA compliant?
+##### How many stations are ADA compliant?
 ```{r ada_compliant}
 ada_compliant = distinct(transit_df, station_name, line, ada) %>%
   filter(ada == TRUE)
 ```
 There are `r nrow(ada_compliant)` ADA compliant stations in NYC.
 
-#### What proportions of station entrances/exits without vending allow entrance?
+##### What proportions of station entrances/exits without vending allow entrance?
 ```{r vending_entrance}
 without_vending = filter(transit_df, vending == "NO")
 
@@ -120,7 +124,7 @@ The proportion of station entrances/exits without vending that allow entrance is
 
 
 
-#### Reformatting the route and route name variables
+##### Reformat the route and route name variables.
 Next, reformat the data so that route number and route name are distinct variables.
 ```{r reformat_route}
 transit_df_tidy =
@@ -139,7 +143,7 @@ print(transit_df_tidy)
   
 ```
 
-#### How many distinct stations serve the A train?
+##### How many distinct stations serve the A train?
 ```{r distinct_a}
 distinct_a = distinct(transit_df_tidy, line, station_name, route_name, .keep_all = TRUE) %>%
   filter(route_name == "A")
@@ -147,7 +151,7 @@ distinct_a = distinct(transit_df_tidy, line, station_name, route_name, .keep_all
 There are `r nrow(distinct_a)` distinct stations that serve the A train in NYC.
 
 
-#### Of the stations that serve the A train, how many are ADA compliant?
+##### Of the stations that serve the A train, how many are ADA compliant?
 ```{r}
 ada_compliant_a = filter(distinct_a, ada == TRUE)
 ```
@@ -155,25 +159,24 @@ Of the stations that serve the A train, there are `r nrow(ada_compliant_a)` stat
 
 ## Problem 3
 
-
+##### Read and clean the pols-month dataset.
 ```{r load_clean_pols}
 pols_df =
    read_csv(
      "./data/fivethirtyeight_datasets/pols-month.csv") %>%
   janitor::clean_names() %>%
   separate(mon, into = c("year", "month", "day")) %>%
-  mutate(month = month.abb[as.numeric(month)]) %>%
-  mutate(president = case_when(
-    prez_gop == 0 ~ "dem",
-    prez_gop == 1 ~ "gop",
-    prez_gop == 2 ~ "gop"
-  )) %>%
-  mutate(year = as.numeric(year)) %>%
+  mutate(month = month.abb[as.numeric(month)],
+         president = case_when(
+            prez_gop == 0 ~ "dem",
+            prez_gop == 1 ~ "gop",
+            prez_gop == 2 ~ "gop"),
+         year = as.numeric(year)) %>%
   select(-prez_dem, -prez_gop, -day)
 
 ```
 
-
+##### Read and clean the snp dataset. 
 ```{r load_clean_snp}
 snp_df =
    read_csv(
@@ -189,12 +192,12 @@ snp_df =
 ```
 
 
-
+##### Read and clean the unemployment dataset.
 ```{r load_clean_unemployment}
 unemployment_df =
    read_csv(
      "./data/fivethirtyeight_datasets/unemployment.csv") %>%
-  pivot_longer(
+   pivot_longer(
     Jan:Dec,
     names_to = "month",
     values_to = "unemployment_rate") %>%
@@ -205,13 +208,13 @@ unemployment_df =
 
 
 
-
+##### Join the pols-month, snp, and unemployment datasets.
 ```{r merge_data}
 first_join = 
-left_join(pols_df, snp_df, by = c("year", "month")) 
+  left_join(pols_df, snp_df, by = c("year", "month")) 
 
 final_df = 
-  left_join(first_merge, unemployment_df, by = c("year", "month")) 
+  left_join(first_join, unemployment_df, by = c("year", "month")) 
   
 ```
 
