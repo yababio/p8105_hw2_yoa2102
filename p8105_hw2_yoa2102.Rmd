@@ -75,17 +75,22 @@ left_join(precip_df, month_df, by = "month") %>%
 ```
 
 
-##### Describe the Mr. Trash Wheel and precipitation datasets.
+##### Describe the Mr. Trash Wheel and Precipitation datasets.
 This data set contains information from the Mr. Trashwheel trash collector in Baltimore, Maryland. As trash enters the harbor, it is collected by the trashwheel and stored in a dumpster. The dataset contains information about the month, year, day, and type of trash collected. The dataset consists of `r nrow(trashwheel_df)` rows and `r ncol(trashwheel_df)` columns. Additional data sheets include month precipitation data. In this dataset:
 
 * The median number of sports balls found in a dumpster in 2019 was `r trashwheel_df %>% filter(year == 2019) %>% pull(sports_balls) %>% median()`.
 
-* The average weight of the trash collected by the trashwheel in 2019 was `r trashwheel_df %>% filter(year == 2019) %>% pull(weight_tons) %>% mean()` tons. 
+* The average weight of the trash collected by the trashwheel in 2019 was `r round(trashwheel_df %>% filter(year == 2019) %>% pull(weight_tons) %>% mean(), 2)` tons. 
 
+The 2017 and 2018 Precipitation datasets each have `r ncol(precip_2018)` columns and `r nrow(precip_2018)` rows. The combined Precipitation dataset has `r ncol(precip_month_name_df)` columns and `r nrow(precip_month_name_df)` rows. 
+
+* The total precipitation in 2017 was `r sum(pull(precip_2017, total))` inches.
+
+* The total precipitation in 2018 was `r sum(pull(precip_2018, total))` inches.
 
 ## Problem 2
 
-##### Read and clean the NYC transit data.
+##### Read and clean the NYC Transit data.
 
 ```{r read_transit}
 transit_df =
@@ -97,8 +102,13 @@ transit_df =
  
 ```
 
-##### Describe the NYC transit data.
+##### Describe the NYC Transit data.
+The NYC Transit dataset contains information about the lines, routes available, entrance types, vending availability, and ADA compliance of subway stations in New York City.
+This dataset consists of `r ncol(transit_df)` columns and `r nrow(transit_df)` rows. 
 
+In order to clean the dataset thus far, variable names were standardized using `janitor::clean_names()`. Using `select`, the following relevant variables were kept from the original dataset: `r colnames(transit_df)`. Lastly, the `entry` variable was converted from a character to a logical variable using the functions `mutate` and `recode`.
+
+However, it is important to note that these data are NOT tidy. The route1:route11 variables make the dataset uneccessarily wide, and generate a large number of NAs. In order to optimize the dataset, it would be best to reformat these variables as observations within a new variable.  
 
 
 ##### How many distinct stations are there?
