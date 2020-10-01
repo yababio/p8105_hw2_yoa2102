@@ -103,7 +103,7 @@ transit_df =
 ```
 
 ##### Describe the NYC Transit data.
-The NYC Transit dataset contains information about the lines, routes available, entrance types, vending availability, and ADA compliance of subway stations in New York City.
+The NYC Transit dataset contains information about the lines, routes available, entry, entrance types, vending availability, and ADA compliance of subway stations in New York City.
 This dataset consists of `r ncol(transit_df)` columns and `r nrow(transit_df)` rows. 
 
 In order to clean the dataset thus far, variable names were standardized using `janitor::clean_names()`. Using `select`, the following relevant variables were kept from the original dataset: `r colnames(transit_df)`. Lastly, the `entry` variable was converted from a character to a logical variable using the functions `mutate` and `recode`.
